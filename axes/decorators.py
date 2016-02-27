@@ -317,7 +317,7 @@ def watch_login(func):
             login_unsuccessful = (
                 response and
                 not response.has_header('location') and
-                response.status_code != 302
+                response.status_code not in [200, 302]
             )
 
             access_log = AccessLog.objects.create(
