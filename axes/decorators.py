@@ -313,11 +313,15 @@ def watch_login(func):
 
         if request.method == 'POST':
             # see if the login was successful
-
+            # ObtainAuthToken does not redirect on success and returns 400 on fail
+            if func.__name__ == 'ObtainAuthToken':
+                accepted_code = 200
+            else:
+                accepted_code = 302
             login_unsuccessful = (
                 response and
                 not response.has_header('location') and
-                response.status_code not in [200, 302]
+                response.status_code != accepted_code
             )
 
             access_log = AccessLog.objects.create(
